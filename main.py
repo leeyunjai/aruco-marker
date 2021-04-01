@@ -17,11 +17,32 @@ def create_files():
 def detect():
   cap = cv2.VideoCapture(0)
 
+  marker_length = 0.025 # [m]
+  camera_matrix = np.array( [[1.42068235e+03,0.00000000e+00,9.49208512e+02],
+    [0.00000000e+00,1.37416685e+03,5.39622051e+02],
+    [0.00000000e+00,0.00000000e+00,1.00000000e+00]] )
+  distortion_coeff = np.array( [1.69926613e-01,-7.40003491e-01,-7.45655262e-03,-1.79442353e-03, 2.46650225e+00] )
+
   while(True):
     _, img = cap.read()
     corners, ids, _ = cv2.aruco.detectMarkers(img, dictionary, parameters=parameters)
 
     if len(corners) > 0:
+      img = cv2.aruco.drawDetectedMarkers(img, corners, ids)
+      
+      for i, corner in enumerate(corners):
+        rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corner, marker_length, camera_matrix, distortion_coeff)
+        print(rvec, tvec, (tvec[0][0][2] * 100))
+        tvec = np.squeeze(tvec)
+        rvec = np.squeeze(rvec)
+        rvec_matrix = cv2.Rodrigues(rvec)
+        rvec_matrix = rvec_matrix[0] # rodoriguesから抜き出し
+        transpose_tvec = tvec[np.newaxis, :].T
+        proj_matrix = np.hstack((rvec_matrix, transpose_tvec))
+        euler_angle = cv2.decomposeProjectionMatrix(proj_matrix)[6] # [deg]
+        draw_pole_length = marker_length/2
+        cv2.aruco.drawAxis(img, camera_matrix, distortion_coeff, rvec, tvec, draw_pole_length) 
+      
       # flatten the ArUco IDs list
       ids = ids.flatten()
       # loop over the detected ArUCo corners
@@ -45,7 +66,6 @@ def detect():
                     (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX,
                     0.5, (0, 255, 0), 2)
 
-    #img = cv2.aruco.drawDetectedMarkers(img, _c, _ids)
     cv2.imshow("DEMO", img)
     cv2.waitKey(1)
 
