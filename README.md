@@ -1,4 +1,4 @@
-# aruco-opencv
+# Detection of Aruco makers
  - Ubuntu 18.04/Raspbian
  - opencv-python 4.1.1, python3
  - might need "sudo apt install libhdf5-dev -y"
