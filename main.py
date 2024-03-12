@@ -37,12 +37,12 @@ def detect(img):
       bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
       bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
       topLeft = (int(topLeft[0]), int(topLeft[1]))
-      # cv2.circle(img, (cX, cY), 4, (0, 0, 255), -1)
-      # cv2.line(img, topLeft, topRight, (255, 0, 0), 4)
-      # cv2.line(img, topRight, bottomRight, (255, 0, 0), 4)
-      # cv2.line(img, bottomRight, bottomLeft, (255, 0, 0), 4)
-      # cv2.line(img, bottomLeft, topLeft, (255, 0, 0), 4)
-      # cv2.putText(img, str(markerID),
+      #cv2.circle(img, (cX, cY), 4, (0, 0, 255), -1)
+      cv2.line(img, topLeft, topRight, (255, 0, 0), 4)
+      cv2.line(img, topRight, bottomRight, (255, 0, 0), 4)
+      cv2.line(img, bottomRight, bottomLeft, (255, 0, 0), 4)
+      cv2.line(img, bottomLeft, topLeft, (255, 0, 0), 4)
+      #cv2.putText(img, str(markerID),
       #            (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX,
       #            0.5, (0, 255, 0), 2)
       cX = int((topLeft[0] + bottomRight[0]) / 2.0)
